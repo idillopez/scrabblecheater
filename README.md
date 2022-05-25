@@ -1,0 +1,2 @@
+# scrabblecheater
+This code is intended to help Scrabble players strengthen their game by providing the highest point words wherever possible on the board. Once the player runs the code it will ask them to enter the letters they have in their rack and the letters that already are on the board in accordance with their location. Once all input is entered, the code chooses the appropriate word with the highest point possible.
