@@ -1,0 +1,157 @@
+#this is to connect google drive and the txt file to google collab
+from google.colab import drive
+drive.mount('/content/drive')
+from random import shuffle
+
+#this is to import the txt file from drive
+import nltk
+from nltk.corpus import PlaintextCorpusReader
+
+#this is to import the txt file from drive and read it
+from os import read
+words = '/content/drive/MyDrive/Colab Notebooks/Collins Scrabble Words (2019).txt'
+corpus = PlaintextCorpusReader(words, '.*')
+corpus.fileids()
+
+f = open('/content/drive/MyDrive/Colab Notebooks/Collins Scrabble Words (2019).txt', 'r')
+corpus = f.read()
+variable = f.readline(1)
+print(variable)
+
+import numpy as np
+import pandas as pd
+import re 
+
+LETTER_VALUES = {"A": 1,
+                 "B": 3,
+                 "C": 3,
+                 "D": 2,
+                 "E": 1,
+                 "F": 4,
+                 "G": 2,
+                 "H": 4,
+                 "I": 1,
+                 "J": 1,
+                 "K": 5,
+                 "L": 1,
+                 "M": 3,
+                 "N": 1,
+                 "O": 1,
+                 "P": 3,
+                 "Q": 10,
+                 "R": 1,
+                 "S": 1,
+                 "T": 1,
+                 "U": 1,
+                 "V": 4,
+                 "W": 4,
+                 "X": 8,
+                 "Y": 4,
+                 "Z": 10,
+                 "#": 0}
+
+class Board:
+#this is how we add letters to designated locations on the board
+
+    th = np.empty((3,3), dtype=str)
+    output_th = np.array_str(th)
+
+def get_words():
+#this part of the code gets the weighted value of a word at the board and created a new dictionary with only strings that have a lenght of maximum three
+    weight = 0    
+    WORDS_IN_THE_CORPUS = {}   
+#this makes the code read the lines in the txt and iterate the lines to get the words one by one, then it removes empty characters and cleanes up the data
+    file = open('/content/drive/MyDrive/Colab Notebooks/Collins Scrabble Words (2019).txt', 'r')   
+    Lines = file.readlines()    
+    for word in Lines:  
+        word = word.replace("\n", "")  
+        word.strip()    
+        if len(word) == 2 or len(word) == 3:    # gets the words which has a length of two or three
+            for letter in word:  # travers the word to get the letters
+                weight += LETTER_VALUES[letter]  
+            WORDS_IN_THE_CORPUS[word] = weight  
+            weight = 0  # after getting the weighted value of a word, cleans the weight variable
+    #print(WORDS_IN_THE_CORPUS)  # you can see your new lexicon with its assigned point from here but comment this after testing!!!
+    return WORDS_IN_THE_CORPUS
+
+
+#the code below investigates the possibilities of how possible words can be located on the board, for this there is a if code for each box on the board
+def find_possible_words(words, row, column, board_letter, user_rack):
+    possible_positions = []
+    if row == 0 and column == 0:
+      possible_positions.append(0)
+    elif row == 1 and column == 0:
+      possible_positions.append(0)
+      possible_positions.append(1)
+    elif row == 2 and column == 0:
+      possible_positions.append(0)
+      possible_positions.append(2)
+    elif row == 0 and column == 1:
+      possible_positions.append(0)
+      possible_positions.append(1)
+    elif row == 0 and column == 2:
+      possible_positions.append(0)
+      possible_positions.append(2)
+    elif row == 1 and column == 1:
+      possible_positions.append(1)
+    elif row == 1 and column == 2:
+      possible_positions.append(1)
+      possible_positions.append(2)
+    elif row == 2 and column == 1:
+      possible_positions.append(1)
+      possible_positions.append(2)
+    elif row == 2 and column == 2:
+      possible_positions.append(2)
+    else: 
+        print("something went wrong with locating letter on board")
+
+    possible_words = []
+    for word in words:
+      for position in possible_positions:
+        try:
+          if word[position] == board_letter:
+            a = 0
+            for letter in word:
+              if letter in user_rack or letter == board_letter:
+                a = a+1
+              else:
+                a = a-100
+            if a > 0:
+              possible_words.append(word)
+        except:
+          None
+    return possible_words
+
+#this code brings everything together by chosing the best possible word in accordance with the constraints that are designated above
+def find_perfect_word(words, possible_words):
+  winner = ""
+  ex_point = 0
+  for possible_word in possible_words:
+    point = words.get(possible_word)
+    print(possible_word, point)
+    if point > ex_point:
+      winner = possible_word
+      ex_point = point
+  print(winner)
+  return winner, ex_point
+
+def start_game():
+    words = get_words()
+    board = Board()
+    user_rack = []
+    for i in range(7):
+        letter = input("Please enter your rack: ").upper()
+        user_rack.append(letter)
+    column = int(input("Please enter column: "))
+    row = int(input("Please enter row: "))
+    board_letter = (input("Please enter letter on board: ")).upper()
+    board.th[row,column] = board_letter
+    print(board.th)
+    possible_words = find_possible_words(words, row, column, board_letter, user_rack)
+    print("possible_words:", possible_words)
+    best_word, point = find_perfect_word(words, possible_words)
+    print("best_word:", best_word, "point:", point)
+
+
+    
+start_game()
