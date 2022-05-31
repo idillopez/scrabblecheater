@@ -1,14 +1,19 @@
-#this is to import the txt file
+#this is to connect google drive and the txt file to google collab
+from google.colab import drive
+drive.mount('/content/drive')
+from random import shuffle
+
+#this is to import the txt file from drive
 import nltk
 from nltk.corpus import PlaintextCorpusReader
 
 #this is to import the txt file from drive
 from os import read
-words = 'https://github.com/idillopez/scrabblecheater/blob/3dd90c978bc3d8420e02a13eab581a2e9dcee525/Collins%20Scrabble%20Words%20(2019).txt'
+words = '/content/drive/MyDrive/Colab Notebooks/Collins Scrabble Words (2019).txt'
 corpus = PlaintextCorpusReader(words, '.*')
 corpus.fileids()
 
-f = open('https://github.com/idillopez/scrabblecheater/blob/3dd90c978bc3d8420e02a13eab581a2e9dcee525/Collins%20Scrabble%20Words%20(2019).txt', 'r')
+f = open('/content/drive/MyDrive/Colab Notebooks/Collins Scrabble Words (2019).txt', 'r')
 corpus = f.read()
 variable = f.readline(1)
 print(variable)
@@ -16,6 +21,7 @@ print(variable)
 import numpy as np
 import pandas as pd
 import re 
+
 
 LETTER_VALUES = {"A": 1,
                  "B": 3,
@@ -75,7 +81,7 @@ class Words:
     weight = 0    
     WORDS_IN_THE_CORPUS = {}   
 #we made or code read the lines in the txt and iterate the lines to get the words one by one then we removed empty characters and cleaned up our data
-    file = open('https://github.com/idillopez/scrabblecheater/blob/3dd90c978bc3d8420e02a13eab581a2e9dcee525/Collins%20Scrabble%20Words%20(2019).txt', 'r')   
+    file = open('/content/drive/MyDrive/Colab Notebooks/Collins Scrabble Words (2019).txt', 'r')      
     Lines = file.readlines()    
     for word in Lines:  
         word = word.replace("\n", "")  
