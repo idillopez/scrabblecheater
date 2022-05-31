@@ -1,7 +1,7 @@
 # scrabblecheater
 This code is intended to help Scrabble players strengthen their game by providing the highest point words wherever possible on the board. Once the player runs the code it will ask them to enter the letters they have in their rack and the letters that already are on the board in accordance with their location. Once all input is entered, the code chooses the appropriate word with the highest point possible.
 
-***disclaimer*** 
+***disclaimer:*** 
 The code has been created by 3 linguistics students who have never used phyton or any other programming language before! We did our best however if the code doesn't fulfill expectations, please go easy on us! 
 ps: it only functions with maximum 3 letter words at this point, on a 3x3 board.
 
